@@ -25,6 +25,7 @@ Gem::Specification.new do |s|
     "README.markdown",
     "Rakefile",
     "VERSION",
+    "active_hash_fields.gemspec",
     "db/database.yml",
     "db/migrations/1_create_dummy.rb",
     "db/schema.rb",
