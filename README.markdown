@@ -35,8 +35,7 @@ Now you can do things like:
     user.notifications.new_private_message  # => true
 
 
-IMPORTANT NOTE
-if you don't set a default value for the field, it will be ignore, that is:
+IMPORTANT NOTE! If you don't set a default value for the field, it will be ignored, that is:
 
     user.notifications.some_non_existent_field = true
     user.notifications.some_non_existent_field # => nil
