@@ -15,4 +15,12 @@ RSpec.configure do |config|
     ActiveRecord::Base.establish_connection(dbconfig)
   end
 
+  config.after(:suite) do
+    conn = ActiveRecord::Base.connection
+    tables = conn.execute("SELECT name FROM sqlite_master WHERE type = 'table'").map { |r| r[0] }
+    tables.delete "schema_migrations"
+    tables.each { |t| conn.execute("DELETE FROM #{t};") }
+    tables.each { |t| conn.execute("DELETE FROM SQLITE_SEQUENCE WHERE name='#{t}';") }
+  end
+
 end
