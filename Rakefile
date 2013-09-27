@@ -2,6 +2,8 @@
 
 require 'rubygems'
 require 'bundler'
+require 'active_record'
+
 begin
   Bundler.setup(:default, :development)
 rescue Bundler::BundlerError => e
@@ -17,30 +19,13 @@ Jeweler::Tasks.new do |gem|
   gem.name = "active_hash_fields"
   gem.homepage = "http://github.com/snitko/active_hash_fields"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.summary = %Q{Adds nested fields to an AR model}
+  gem.description = %Q{Adds nested fields to an AR model stored in a serialized field as hash}
   gem.email = "roman.snitko@gmail.com"
   gem.authors = ["Roman Snitko"]
   # dependencies defined in Gemfile
 end
 Jeweler::RubygemsDotOrgTasks.new
-
-require 'rake/testtask'
-Rake::TestTask.new(:test) do |test|
-  test.libs << 'lib' << 'test'
-  test.pattern = 'test/**/test_*.rb'
-  test.verbose = true
-end
-
-require 'rcov/rcovtask'
-Rcov::RcovTask.new do |test|
-  test.libs << 'test'
-  test.pattern = 'test/**/test_*.rb'
-  test.verbose = true
-  test.rcov_opts << '--exclude "gems/*"'
-end
-
-task :default => :test
 
 require 'rdoc/task'
 Rake::RDocTask.new do |rdoc|
@@ -50,4 +35,23 @@ Rake::RDocTask.new do |rdoc|
   rdoc.title = "active_hash_fields #{version}"
   rdoc.rdoc_files.include('README*')
   rdoc.rdoc_files.include('lib/**/*.rb')
+end
+
+dbconfig = YAML::load(File.open('db/database.yml'))
+ActiveRecord::Base.establish_connection(dbconfig)
+
+namespace :db do
+
+  task :migrate do
+    ActiveRecord::Migration.verbose = true
+    ActiveRecord::Migrator.migrate File.dirname(__FILE__) + '/db/migrations', ENV['VERSION'] ? ENV['VERSION'].to_i : nil
+    ActiveRecord::SchemaDumper.dump ActiveRecord::Base.connection, File.open(File.dirname(__FILE__) + '/db/schema.rb', 'w')
+  end
+
+  task :rollback do
+    ActiveRecord::Migration.verbose = true
+    ActiveRecord::Migrator.down File.dirname(__FILE__) + '/db/migrations', ENV['VERSION'] ? ENV['VERSION'].to_i : nil
+    ActiveRecord::SchemaDumper.dump ActiveRecord::Base.connection, File.open(File.dirname(__FILE__) + '/db/schema.rb', 'w')
+  end
+
 end
