@@ -12,7 +12,15 @@ This can usually be solved by either creating an additional associated model lik
 Usage
 ------------------------
 
-Here's the solution:
+Here's the solution. First add a field to store all nested fields as a serialized hash:
+
+    class AddNotificationsToUsers < ActiveRecord::Migration
+      def change
+        add_column :users, :notifications, :text
+      end
+    end
+    
+Then define nested fields in your model:
 
     class User < ActiveRecord::Base
 
