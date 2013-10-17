@@ -1,6 +1,6 @@
 source "http://rubygems.org"
 
-gem 'activerecord', '~> 3.2.0'
+gem 'activerecord'
 
 group :development do
   gem 'rspec'
