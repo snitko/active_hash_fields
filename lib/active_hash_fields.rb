@@ -7,8 +7,9 @@ module ActiveHashFields
     def initialize(hash, defaults={})
       hash ||= {}
       defaults.stringify_keys!; hash.stringify_keys!
-      @hash = defaults.merge(hash)
-      @hash.each { |k,v| @hash[k] = self.class.convert_to_boolean(v) }
+      @defaults = defaults
+      @hash     = defaults.merge(hash)
+      @hash.each { |k,v| @hash[k] = convert_to_correct_type(k,v) }
       @hash.delete_if { |k,v| defaults[k].nil? }
     end
 
@@ -20,7 +21,7 @@ module ActiveHashFields
         elsif name.match(/=$/)
           k = name.sub(/=$/, "")
           if @hash.has_key?(k)
-            @hash[k] = self.class.convert_to_boolean(args[0])
+            @hash[k] = convert_to_correct_type(k, args[0])
           end
         end
       else
@@ -29,11 +30,19 @@ module ActiveHashFields
       nil
     end
 
-    def self.convert_to_boolean(v)
-      if (v == "1" || v == "true" || v == true)
-        true
-      elsif v == "0" || v == "false" || v == false
-        false
+    def convert_to_correct_type(k,v)
+      if @defaults[k] == false || @defaults[k] == true
+        if (v == "1" || v == "true" || v == true)
+          true
+        elsif v == "0" || v == "false" || v == false
+          false
+        end
+      elsif @defaults[k].kind_of?(Numeric)
+        if @defaults[k] =~ /\./
+          v.to_f
+        else
+          v.to_i
+        end 
       else
         v
       end

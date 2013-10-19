@@ -2,9 +2,10 @@ require 'spec_helper'
 
 class Dummy < ActiveRecord::Base
   active_hash_fields :notifications,
-    hello:                   false,
-    hi:                      false,
+    hello:                   "",
+    hi:                      "",
     some_boolean_value:      false,
+    some_integer_value:      0,
     answers_to_my_questions: true,
     news:                    false
 end
@@ -21,11 +22,18 @@ describe ActiveHashFields do
     @dummy.notifications.hi.should    == "hi"
   end
 
-  it "converts 0 and 1 strings to boolean values" do
+  it "converts 0 and 1 strings to boolean values for boolean fields" do
     @dummy.valid?
     @dummy.notifications.some_boolean_value.should be_true
     @dummy.notifications.some_boolean_value = "0"
     @dummy.notifications.some_boolean_value.should be_false
+  end
+
+  it "converts number strings to integers" do
+    @dummy.valid?
+    @dummy.notifications.some_integer_value.should == 0
+    @dummy.notifications.some_integer_value        = "1"
+    @dummy.notifications.some_integer_value.should == 1
   end
 
   it "sets default values to the hash as soon as object is initialized" do
