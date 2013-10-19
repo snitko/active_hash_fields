@@ -32,7 +32,7 @@ module ActiveHashFields
 
     def convert_to_correct_type(k,v)
       if @defaults[k] == false || @defaults[k] == true
-        if (v == "1" || v == "true" || v == true)
+        if    v == "1" || v == "true"  || v == true
           true
         elsif v == "0" || v == "false" || v == false
           false
