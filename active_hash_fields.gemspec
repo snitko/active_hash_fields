@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "active_hash_fields"
-  s.version = "0.1.1"
+  s.version = "0.1.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Roman Snitko"]
-  s.date = "2013-10-17"
+  s.date = "2013-10-19"
   s.description = "Adds nested fields to an AR model stored in a serialized field as hash"
   s.email = "roman.snitko@gmail.com"
   s.extra_rdoc_files = [
@@ -37,7 +37,7 @@ Gem::Specification.new do |s|
   s.homepage = "http://github.com/snitko/active_hash_fields"
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
-  s.rubygems_version = "1.8.25"
+  s.rubygems_version = "1.8.24"
   s.summary = "Adds nested fields to an AR model"
 
   if s.respond_to? :specification_version then
